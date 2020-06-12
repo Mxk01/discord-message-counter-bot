@@ -14,12 +14,14 @@ mongoose.connect(process.env.MONGO_URI,{
 
 
 bot.on("ready",async ()=>{
+
   console.log(`${bot.user.username} is online`)
   bot.user.setStatus('idle');
   bot.user.setActivity('count time');
 });
 
 bot.on("message",async(message)=>{ // if a message is sent
+  //let guild = bot.guild.get('718918742972694629');
 // let mention = message.mentions.users.first();
 // if (mention) console.log(mention.id);
 // if(message.content.startsWith(`!count`)){ // if the command starts with count
