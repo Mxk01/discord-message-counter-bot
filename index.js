@@ -19,55 +19,76 @@ bot.on("ready",async ()=>{
   bot.user.setActivity('count time');
 });
 
-bot.on("message",async(message)=>{
-// if(message.content.startsWith('!count')){
+bot.on("message",async(message)=>{ // if a message is sent
+// let mention = message.mentions.users.first();
+// if (mention) console.log(mention.id);
+// if(message.content.startsWith(`!count`)){ // if the command starts with count
     if(message.author.bot) return; // Stop if bot repplies
 
-// Finds an user from the db;
-  let messageUser = await Messages.findOne({userID:message.mentions.users.first().id});
-  // If the user isn't in the db,create the user
+// Finds a mentioned user from the db;
+  let messageUser = await Messages.findOne({userID:message.author.id});
+  // message.mentions.users.first().id;
+  // If the user isn't a mentioned user in the db,create the user
    if(!messageUser){
-    messageUser = new Messages({
-      userID:message.mentions.users.first().id,
-      messages:0
-    });
-    // Save the user
-    await messageUser.save().catch(e=>console.log(e));
+    messageUser = new Messages({userID:message.author.id,messages:0});
 
-  };
+
+    // Save the user
+  await messageUser.save().catch(e=>console.log(e));
+}
 
 
 let increasePost = async() => {
-
-  let user = await Messages.findOne({userID:message.mentions.users.first().id});
+  let user = await Messages.findOne({userID:message.author.id});
   user.messages++;
+  await user.save();
 
-await user.save();
-let mentioned = message.mentions.users.first();
- message.channel.send(`${mentioned} has   ${ user.messages} messages `)
+
+let mentioned = message.mentions.users.first().id;
+if(message.content.startsWith(`!count`))
+{
+  if(message.author!=message.mentions.users.first())
+  {
+    currentPost();
+    }
+
+
+    else {
+
+ message.channel.send(`${message.author} has   ${ user.messages} messages `)
+
+}
  // const messages = await Messages.findOne({ userID:message.mentions.users.first().id})
  // console.log(messages.messages);
  //    // message.channel.send(`${message.author.username} has  message ${ messages.messages} messages `)
 
+
+
+}
 }
 
+
+
 let currentPost = async() => {
+
   let user = await Messages.findOne({userID:message.mentions.users.first().id});
   user.messages+=0;
 await user.save();
 // const messages = await Messages.findOne({ userID:message.mentions.users.first().id})
 let mentioned = message.mentions.users.first();
+
  message.channel.send(`${mentioned} has   ${user.messages} messages `)
+
 }
 
-if(message.author!=message.mentions.users.first())
-{
-currentPost();
-}
-else
-{
+
+
+
+// else
+// {
+// increasePost();
+// }
 increasePost();
-}
 
 
 
@@ -80,6 +101,7 @@ if(message.content.startsWith(`!delete`)){
   userMessages.save()
   message.channel.send(`${message.mentions.users.first()} has   ${ userMessages.messages} messages `)
 }
+
 });
 
 
