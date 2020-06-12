@@ -17,7 +17,7 @@ bot.on("ready",async ()=>{
 
   console.log(`${bot.user.username} is online`)
   bot.user.setStatus('idle');
-  bot.user.setActivity('count time');
+  bot.user.setActivity(' with your mind');
 });
 
 bot.on("message",async(message)=>{ // if a message is sent
